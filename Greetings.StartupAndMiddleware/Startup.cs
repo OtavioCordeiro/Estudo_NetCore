@@ -18,6 +18,7 @@ namespace Greetings
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IGreeting, RandomGreeting>();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +48,8 @@ namespace Greetings
             });
 
             app.UseWelcomePage("/bemvindo");
+
+            app.UseMvcWithDefaultRoute();
 
             app.Run(async (context) =>
             {
