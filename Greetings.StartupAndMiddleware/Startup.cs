@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -49,12 +45,21 @@ namespace Greetings
 
             app.UseWelcomePage("/bemvindo");
 
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc(ConfigurationRountes);
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync(greetings.GetMessageOfDay());
+                var messageOfDay = greetings.GetMessageOfDay();
+                context.Response.ContentType = "text/plain";
+                await context.Response.WriteAsync(messageOfDay);
             });
+        }
+
+        private void ConfigurationRountes(IRouteBuilder routeBuilder)
+        {
+            routeBuilder.MapRoute("Default",
+                "{controller=home}/{action=index}/{id?}");
+
         }
     }
 }
